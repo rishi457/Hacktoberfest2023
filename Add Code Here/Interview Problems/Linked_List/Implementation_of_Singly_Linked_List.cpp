@@ -1,272 +1,200 @@
-// Implementation of Singly Linked List
-
-// Insertion In Linked List
-    // Insert At Beginning
-    // Insert At End
-    // Insert At Middle
-
-// Deletion In Linked List
-    // Delete At Beginning
-    // Delete At End
-    // Delete At Middle
-
-
-#include<bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-struct node
-{
+struct Node {
     int data;
-    struct node *next;
+    Node* next;
+
+    Node(int val) : data(val), next(nullptr) {}
 };
-struct node *head = NULL;
 
-struct node *newnode, *temp, *Nextnode;
+class LinkedList {
+private:
+    Node* head;
 
-void Insert()
-{ 
-    newnode = (struct node *)malloc(sizeof(struct node *));
+public:
+    LinkedList() : head(nullptr) {}
 
-    cout<<"Enter the Data to be inserted : ";
-    cin>>newnode->data;
+    void insert(int data) {
+        Node* newNode = new Node(data);
 
-    newnode->next = NULL;
-
-    if(head == NULL)
-    {
-        head = temp = newnode;
-    }
-    else
-    {
-        temp->next = newnode;
-        temp = newnode;
-    }
-}
-
-void Insert_At_Begin()
-{
-    newnode = (struct node *)malloc(sizeof(struct node));
-
-    cout<<"Enter the Value to be Inserted At Begin : ";
-    cin>>newnode->data;
-
-    newnode->next = head;
-    head = newnode;
-}
-
-void Insert_At_End()
-{
-    newnode = (struct node *)malloc(sizeof(struct node));
-
-    cout<<"enter the Data to be insertd At End : ";
-    cin>>newnode->data;
-
-    newnode->next = NULL;
-    temp = head;
-
-    while(temp->next != NULL)
-    {
-        temp = temp->next;
+        if (head == nullptr) {
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
     }
 
-    temp->next = newnode;
-}
-
-void Insert_At_Position(int pos)
-{
-    newnode = (struct node *)malloc(sizeof(struct node));
-
-    cout<<"enter the Data to be insertd At Position : ";
-    cin>>newnode->data;
-
-    int i;
-    if(pos == 1)
-    {
-        newnode->next = head;
-        head = newnode;
+    void insertAtBegin(int data) {
+        Node* newNode = new Node(data);
+        newNode->next = head;
+        head = newNode;
     }
-    else
-    {
-        temp = head;
 
-        // we are inserting after the position that's why i = 0
-        // Otherwise before position i = 1
-        for(i = i; i<pos-1; i++)
-        {
+    void insertAtEnd(int data) {
+        insert(data);
+    }
+
+    void insertAtPosition(int data, int position) {
+        if (position <= 0) {
+            cout << "Invalid position for insertion." << endl;
+            return;
+        }
+
+        if (position == 1) {
+            insertAtBegin(data);
+        } else {
+            Node* newNode = new Node(data);
+            Node* temp = head;
+
+            for (int i = 1; i < position - 1; i++) {
+                if (temp == nullptr) {
+                    cout << "Invalid position for insertion." << endl;
+                    return;
+                }
+                temp = temp->next;
+            }
+
+            if (temp == nullptr) {
+                cout << "Invalid position for insertion." << endl;
+                return;
+            }
+
+            newNode->next = temp->next;
+            temp->next = newNode;
+        }
+    }
+
+    void deleteAtBegin() {
+        if (head == nullptr) {
+            cout << "Linked List is empty." << endl;
+        } else {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+    void deleteAtEnd() {
+        if (head == nullptr) {
+            cout << "Linked List is empty." << endl;
+        } else if (head->next == nullptr) {
+            deleteAtBegin();
+        } else {
+            Node* temp = head;
+            while (temp->next->next != nullptr) {
+                temp = temp->next;
+            }
+            delete temp->next;
+            temp->next = nullptr;
+        }
+    }
+
+    void deleteAtPosition(int position) {
+        if (position <= 0) {
+            cout << "Invalid position for deletion." << endl;
+            return;
+        }
+
+        if (position == 1) {
+            deleteAtBegin();
+        } else {
+            Node* temp = head;
+
+            for (int i = 1; i < position - 1; i++) {
+                if (temp == nullptr || temp->next == nullptr) {
+                    cout << "Invalid position for deletion." << endl;
+                    return;
+                }
+                temp = temp->next;
+            }
+
+            if (temp == nullptr || temp->next == nullptr) {
+                cout << "Invalid position for deletion." << endl;
+                return;
+            }
+
+            Node* toDelete = temp->next;
+            temp->next = toDelete->next;
+            delete toDelete;
+        }
+    }
+
+    void display() {
+        Node* temp = head;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
             temp = temp->next;
         }
-        newnode->next = temp ->next;
-        temp ->next = newnode;
+        cout << endl;
     }
-}
+};
 
-void Delete_At_Begin()
-{
-    if(head == NULL)
-    {
-        cout<<"Linked List is Empty !!"<<endl;
-    }
-    else
-    {
-        temp = head;
-        head = head ->next;
+int main() {
+    LinkedList linkedList;
 
-        free(temp);
-    }
-}
+    int choice, data, position;
+    while (true) {
+        cout << "\nChoose an operation:" << endl;
+        cout << "1. Insert" << endl;
+        cout << "2. Insert At Begin" << endl;
+        cout << "3. Insert At End" << endl;
+        cout << "4. Insert At Position" << endl;
+        cout << "5. Delete At Begin" << endl;
+        cout << "6. Delete At End" << endl;
+        cout << "7. Delete At Position" << endl;
+        cout << "8. Display" << endl;
+        cout << "9. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-void Delete_At_End()
-{
-    struct node *Prevnode;
-
-    if(head == NULL)
-    {
-        cout<<"Linked List is Empty !!"<<endl;
-    }
-    else
-    {
-        temp = head;
-        while(temp ->next != NULL)
-        {
-            Prevnode = temp;
-            temp = temp->next;
-        }
-
-        if(temp == head)
-        {
-            head = 0;
-        }
-        else
-        {
-            Prevnode -> next = 0;
-        }
-
-        free(temp);
-    }
-}
-
-void Delete_At_Position(int pos)
-{
-    int i = 1;
-
-    struct node *Nextnode;
-
-    temp = head;
-    while(i < pos - 1)
-    {
-        temp = temp ->next;
-        i++;
-    }
-
-    // Link the (n-1) to (n+1)th Node
-    Nextnode = temp->next;
-    temp->next = Nextnode->next;
-
-    free(Nextnode);
-}
-
-void Display()
-{
-    temp = head;
-
-    while( temp != NULL)
-    {
-        cout<<temp->data<<" ";
-        temp = temp ->next;
-    }
-    cout<<endl;
-}
-
-int main()
-{
-    int n, val;
-
-    cout << "------------ LINKED LIST IMPLEMENTATION ------------" << endl;
-
-    cout << "1. INSERT " << endl
-         << "2. INSERT AT BEGIN" << endl
-         << "3. INSERT AT END" << endl
-         << "4. INSERT AT POSITION " << endl
-         << "5. DELETE AT BEGIN" << endl
-         << "6. DELETE AT END" << endl
-         << "7. DELETE AT POSITION " << endl
-         << "8. DISPLAY" << endl
-         << "9. EXIT" << endl;
-    do
-    {
-        cout << "\nEnter the Choice of Operation : ";
-        cin >> n;
-
-        switch (n)
-        {
+        switch (choice) {
             case 1:
-            {
-                Insert();
+                cout << "Enter data: ";
+                cin >> data;
+                linkedList.insert(data);
                 break;
-            }
-
             case 2:
-            {
-                Insert_At_Begin();
+                cout << "Enter data: ";
+                cin >> data;
+                linkedList.insertAtBegin(data);
                 break;
-            }
-
             case 3:
-            {
-                Insert_At_End();
+                cout << "Enter data: ";
+                cin >> data;
+                linkedList.insertAtEnd(data);
                 break;
-            }
-
             case 4:
-            {
-                int Position;
-                cout<<"\nEnter Position of Node to be Inserted : ";
-                cin>>Position;
-
-                Insert_At_Position(Position);
+                cout << "Enter data: ";
+                cin >> data;
+                cout << "Enter position: ";
+                cin >> position;
+                linkedList.insertAtPosition(data, position);
                 break;
-            }
-
             case 5:
-            {
-                Delete_At_Begin();
+                linkedList.deleteAtBegin();
                 break;
-            }
-
             case 6:
-            {
-                Delete_At_End();
+                linkedList.deleteAtEnd();
                 break;
-            }
-
             case 7:
-            {
-                int position;
-                cout<<"\nEnter Position of Node to be Deleted : ";
-                cin>>position;
-
-                Delete_At_Position(position);
+                cout << "Enter position: ";
+                cin >> position;
+                linkedList.deleteAtPosition(position);
                 break;
-            }
-
             case 8:
-            {
-                Display();
+                linkedList.display();
                 break;
-            }
-
             case 9:
-            {
-                exit(0);
-            }
+                return 0;
             default:
-            {
-                cout << "Error" << endl;
-                break;
-            }
+                cout << "Invalid choice." << endl;
         }
-
-    } while (n != 9);
+    }
 
     return 0;
 }
