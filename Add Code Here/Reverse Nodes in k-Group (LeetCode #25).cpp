@@ -28,8 +28,10 @@ ListNode* reverseKGroup(ListNode* head, int k) {
         // Recursively reverse the next group
         head->next = reverseKGroup(current, k);
 
+        // The 'prev' pointer now points to the new head of the reversed group
         return prev;
     }
 
+    // If the group has fewer than k nodes, return head as is
     return head;
 }
