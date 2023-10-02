@@ -1,13 +1,15 @@
 class ToDoList:
     def __init__(self):
-        self.tasks = []
+        self.tasks = set()
 
     def add_task(self, task):
-        self.tasks.append(task)
+        self.tasks.add(task)
 
     def remove_task(self, task):
         if task in self.tasks:
             self.tasks.remove(task)
+        else:
+            print(f"Task '{task}' not found in the to-do list.")
 
     def display_tasks(self):
         if not self.tasks:
